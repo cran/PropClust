@@ -11,20 +11,22 @@ optionally split into smaller blocks. Propensity clustering is then applied to e
 and the clustering is used for the final CPBA decomposition. 
 }
 \usage{
-propensityClustering(adjacency,
-                     decompositionType = c("CPBA", "Pure Propensity"),
-                     objectiveFunction = c("Poisson", "L2norm"),
-                     fastUpdates = TRUE,
-                     blocks = NULL,
-                     initialClusters = NULL,
-                     nClusters = NULL,
-                     maxBlockSize = if (fastUpdates) 5000 else 1000,
-                     clustMethod = "average",
-                     cutreeDynamicArgs = list(deepSplit = 2, minClusterSize = 20, verbose = 0),
-                     dropUnassigned = TRUE,
-                     unassignedLabel = 0,
-                     verbose = 2,
-                     indent = 0)
+propensityClustering(
+  adjacency,
+  decompositionType = c("CPBA", "Pure Propensity"),
+  objectiveFunction = c("Poisson", "L2norm"),
+  fastUpdates = TRUE,
+  blocks = NULL,
+  initialClusters = NULL,
+  nClusters = NULL,
+  maxBlockSize = if (fastUpdates) 5000 else 1000,
+  clustMethod = "average",
+  cutreeDynamicArgs = list(deepSplit = 2, minClusterSize = 20, 
+                           verbose = 0),
+  dropUnassigned = TRUE,
+  unassignedLabel = 0,
+  verbose = 2,
+  indent = 0)
 
 }
 %- maybe also 'usage' for other objects documented here.

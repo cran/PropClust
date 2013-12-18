@@ -1,11 +1,11 @@
-bf88ab80aa38ec70d9ebe01e93d7e69a *DESCRIPTION
+de7f29b766bd2a4c38cbb0a1c142ec66 *DESCRIPTION
 e37ebc90c2343ba716d1b24aa6c45087 *NAMESPACE
 5adf9c80cd9bd1407b987fcfeed5aa78 *R/PropClust-internal.R
 32e0486c241a964df7116776d460c797 *R/blockwisePropClust.R
 7a36e7bb4e991b298bd61f7c3851ac61 *man/CPBADecomposition.Rd
-59398a450d8dbb6a7a07ed971fdec637 *man/PropClust-package.Rd
-8fe1b6d1d1dc879f8e4a7ec9f0a7339e *man/propensityClustering.Rd
-f8a5df1dc92c8243ccfbf7ab2ca8fe29 *src/Makevars
+e9f4bffc2b32962316bbcd3c9e30d8b6 *man/PropClust-package.Rd
+511ba877a60f2f4f2b587b32a2942c51 *man/propensityClustering.Rd
+93c43294d48b448e1e6737e5274dc00e *src/Makevars
 d41d8cd98f00b204e9800998ecf8427e *src/Makevars.win
-822230f273013666a0e39a314e2ef629 *src/PropClustParallelTrials.f90
+de26b7b9ff3530668ba9834eebe5301c *src/PropClustParallelTrials.f90
 2b2df2715165839233f5e0fbf720d752 *src/minWhichMin.c
