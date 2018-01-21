@@ -3383,32 +3383,6 @@
       END DO
       END FUNCTION BISECT_STRING_LIST
 
-      SUBROUTINE INPUT_DATA(TEXT_FILE,LINE,INPUT_UNIT,LINES)
-!
-!     This subroutine opens the text file and determines the number of
-!     lines in it.
-!
-      IMPLICIT NONE
-      CHARACTER(LEN=*) :: TEXT_FILE,LINE
-      INTEGER :: I,INPUT_UNIT,IOERROR,LINES
-!
-!     Open the text file.
-!
-      OPEN(UNIT=INPUT_UNIT,FILE=TEXT_FILE)
-!
-!     Continue reading lines until the end of file is encountered.
-!
-      LINES = 0
-      DO
-         READ(INPUT_UNIT,'(1000A)',IOSTAT=IOERROR) (LINE(I:I),I=1,LEN(LINE))
-         IF (IOERROR<0) THEN
-            RETURN
-         ELSE
-            LINES = LINES+1
-         END IF
-      END DO
-      END SUBROUTINE INPUT_DATA
-
       SUBROUTINE EXTEND_WORD_LIST(LINE,LIST,WORDS,ERROR,HYPHEN_ACTIVE)
 !
 !     This subroutine extracts the words from the current LINE and

@@ -36,15 +36,30 @@
         lnorm=0.
         if (accelerated)
         {
-          compiledFnc = if(fastUpdates) "propclusttrial" else "propclustaccel";
-        } else 
-          compiledFnc = "propensityclustering"
-   
-        results = .Fortran(compiledFnc, ADJ=as.single(adjacency),
-                         Clustering=as.integer(initialClusters),Propensity=as.double(Phat),
-                         IntermodularAdjacency=as.double(Ahat),Factorizability=as.double(fact),
-                         Criteria=as.double(lnorm),Nodes=as.integer(nodes),Clusters=as.integer(nClusters),
-                         L2=as.integer(l2bool),Init=as.integer(initbool))
+          if (fastUpdates)
+          {
+            results = .Fortran(.C_propclusttrial,
+                             ADJ=as.single(adjacency),
+                             Clustering=as.integer(initialClusters),Propensity=as.double(Phat),
+                             IntermodularAdjacency=as.double(Ahat),Factorizability=as.double(fact),
+                             Criteria=as.double(lnorm),Nodes=as.integer(nodes),Clusters=as.integer(nClusters),
+                             L2=as.integer(l2bool),Init=as.integer(initbool))
+          } else {
+            results = .Fortran(.C_propclustaccel,
+                             ADJ=as.single(adjacency),
+                             Clustering=as.integer(initialClusters),Propensity=as.double(Phat),
+                             IntermodularAdjacency=as.double(Ahat),Factorizability=as.double(fact),
+                             Criteria=as.double(lnorm),Nodes=as.integer(nodes),Clusters=as.integer(nClusters),
+                             L2=as.integer(l2bool),Init=as.integer(initbool))
+          }
+        } else {
+          results = .Fortran(.C_propensityclustering,
+                           ADJ=as.single(adjacency),
+                           Clustering=as.integer(initialClusters),Propensity=as.double(Phat),
+                           IntermodularAdjacency=as.double(Ahat),Factorizability=as.double(fact),
+                           Criteria=as.double(lnorm),Nodes=as.integer(nodes),Clusters=as.integer(nClusters),
+                           L2=as.integer(l2bool),Init=as.integer(initbool))
+        }
 
         resultsmod=results[2:6]
         if(l2bool>0){
@@ -126,21 +141,31 @@ CPBADecomposition<-function(adjacency,
   {
     Ahat=matrix(0.5, nClusters,nClusters)
     diag(Ahat) = 1;
-    compiledFnc =  if (accelerated) "propdecompaccel" else "propensitydecomposition";
-    results=.Fortran(compiledFnc, 
-                     ADJ=as.single(adjacency),
-                     Clustering=as.integer(clustering.norm),
-                     Propensity=as.double(Phat),
-                     IntermodularAdjacency=as.double(Ahat),
-                     Factorizability=as.double(fact),
-                     Criteria=as.double(lnorm),Nodes=as.integer(nNodes),
-                     Clusters=as.integer(nClusters),L2=as.integer(objectiveFunction=="L2norm"))
-
+    if (accelerated) 
+    {
+      results=.Fortran(.C_propdecompaccel,
+                       ADJ=as.single(adjacency),
+                       Clustering=as.integer(clustering.norm),
+                       Propensity=as.double(Phat),
+                       IntermodularAdjacency=as.double(Ahat),
+                       Factorizability=as.double(fact),
+                       Criteria=as.double(lnorm),Nodes=as.integer(nNodes),
+                       Clusters=as.integer(nClusters),L2=as.integer(objectiveFunction=="L2norm"))
+    } else {
+      results=.Fortran(.C_propensitydecomposition,
+                       ADJ=as.single(adjacency),
+                       Clustering=as.integer(clustering.norm),
+                       Propensity=as.double(Phat),
+                       IntermodularAdjacency=as.double(Ahat),
+                       Factorizability=as.double(fact),
+                       Criteria=as.double(lnorm),Nodes=as.integer(nNodes),
+                       Clusters=as.integer(nClusters),L2=as.integer(objectiveFunction=="L2norm"))
+    }
     resultsmod=results[3:5]
     resultsmod$IntermodularAdjacency=matrix((resultsmod$IntermodularAdj),ncol=nClusters)
     finalClusters = .translateUsingTable(results$Clustering, .translationTable(clustering.norm, clustering))
   } else {
-    results=.Fortran("singleclusterupdate",ADJ=as.single(adjacency),
+    results=.Fortran(.C_singleclusterupdate, ADJ=as.single(adjacency),
                      Propensity=as.double(Phat),Factorizability=as.double(fact),
                      Criteria=as.double(lnorm),Nodes=as.integer(nNodes),
                      L2=as.integer(objectiveFunction=="L2norm"))
@@ -162,133 +187,14 @@ CPBADecomposition<-function(adjacency,
   return(resultsmod)
 }
 
-#.clusterWordPairs<-function(tfile,clusters){
-#        words=0
-#results1=.Fortran("countwords",textfile=as.character(tfile),Words=as.integer(words))
-#nodes=results1$Words
-#Phat=mat.or.vec(nodes,1)
-#Ahat=mat.or.vec(clusters,clusters)
-#Phat[]=.7
-#Ahat[,]=.5
-#for(i in 1:length(Ahat[1,])){
-#        Ahat[i,i]=1
-#}
-#testmodule=mat.or.vec(nodes,1)
-#testmodule[]=1
-#ADJ=mat.or.vec(nodes,nodes)
-#ADJ[,]=0
-#        loglik=0
-#results=.Fortran("wordpairclusters",textfile=as.character(tfile),ADJ=as.integer(ADJ),Testmodule=as.integer(testmodule),Propensity=as.double(Phat),IntermodularAdjacency=as.double(Ahat),Loglik=as.double(loglik),Words=as.integer(nodes),Clusters=as.integer(clusters))
-##results$wordlist=scan(file="propClustTemp.txt",what=character(),skip=4)
-#resultsmod=results[3:7]
-#resultsmod$Wordlist=scan(file="propClustTemp.txt",what=character(),skip=4)
-#resultsmod$Propensity=results$Propensity[1:results$Words]
-#resultsmod$Testmodule=results$Testmodule[1:results$Words]
-#resultsmod$IntermodularAdjacency=matrix((results$IntermodularAdjacency),ncol=clusters)
-#return(resultsmod)
-#}
-
-
-#.clusterDisorderPairs<-function(tfile,clusters){
-#        words=0
-#results1=.Fortran("countgenes",textfile=as.character(tfile),Words=as.integer(words))
-#nodes=results1$Words
-#nodes2=nodes
-#results2=.Fortran("countdisorders",textfile=as.character(tfile),Dis=as.integer(words))
-#Dis=results2$Dis
-#Phat=mat.or.vec(nodes,1)
-#Ahat=mat.or.vec(clusters,clusters)
-#Phat[]=.7
-#Ahat[,]=.5
-#for(i in 1:length(Ahat[1,])){
-#        Ahat[i,i]=1
-#}
-#testmodule=mat.or.vec(nodes,1)
-#testmodule[]=1
-#ADJ=mat.or.vec(nodes,nodes)
-#ADJ[,]=0
-#        loglik=0
-#results=.Fortran("omimmorbidmap",textfile=as.character(tfile),ADJ=as.single(ADJ),Testmodule=as.integer(testmodule),Propensity=as.double(Phat),IntermodularAdjacency=as.double(Ahat),Loglik=as.double(loglik),Genes=as.integer(nodes),Disorders=as.integer(Dis),Genes2=as.integer(nodes2),Clusters=as.integer(clusters))
-#resultsmod=results[2:8]
-#resultsmod$IntermodularAdjacency=matrix((results$IntermodularAdjacency),ncol=clusters)
-#resultsmod$ADJ=matrix((results$ADJ),ncol=nodes)
-#resultsmod$ADJ=resultsmod$ADJ[1:results$Genes2,1:results$Genes2]
-#res=scan(file="propClustTempOrderedDisorders.txt",what=list(character(),numeric(),integer()),skip=8+clusters,sep="|")
-#resultsmod$Genelist=res[1]
-#return(resultsmod)
-#}
-
-
-#.clusterGenePairs<-function(tfile,clusters){
-#        words=0
-#results1=.Fortran("countgenes",textfile=as.character(tfile),Words=as.integer(words))
-#nodes=results1$Words
-#nodes2=nodes
-#results2=.Fortran("countdisorders",textfile=as.character(tfile),Dis=as.integer(words))
-#Dis=results2$Dis
-#Phat=mat.or.vec(nodes,1)
-#Ahat=mat.or.vec(clusters,clusters)
-#Phat[]=.7
-#Ahat[,]=.5
-#for(i in 1:length(Ahat[1,])){
-#        Ahat[i,i]=1
-#}
-#testmodule=mat.or.vec(nodes,1)
-#testmodule[]=1
-#ADJ=mat.or.vec(nodes,nodes)
-#ADJ[,]=0
-#        loglik=0
-#results=.Fortran("omimgenemap",textfile=as.character(tfile),ADJ=as.single(ADJ),Testmodule=as.integer(testmodule),Propensity=as.double(Phat),IntermodularAdjacency=as.double(Ahat),Loglik=as.double(loglik),Genes=as.integer(nodes),Disorders=as.integer(Dis),Genes2=as.integer(nodes2),Clusters=as.integer(clusters))
-#resultsmod=results[2:8]
-#resultsmod$IntermodularAdjacency=matrix((results$IntermodularAdjacency),ncol=clusters)
-#resultsmod$ADJ=matrix((results$ADJ),ncol=nodes)
-#resultsmod$ADJ=resultsmod$ADJ[1:results$Genes2,1:results$Genes2]
-#res=scan(file="propClustTempOrderedGenes.txt",what=list(character(),numeric(),integer()),skip=8+clusters,sep="|")
-#resultsmod$Genelist=res[1]
-#return(resultsmod)
-#}
-
-
-#.clusterCompanyPairs<-function(tfile,clusters){
-#        mems=0
-#results2=.Fortran("countitems",textfile=as.character(tfile),Members=as.integer(mems),Position=as.integer(2))
-#Members=results2$Members
-#        comps=0
-#results1=.Fortran("countitems",textfile=as.character(tfile),Comps=as.integer(comps),Position=as.integer(3))
-#nodes=results1$Comps
-#nodes2=nodes
-#Phat=mat.or.vec(500,1)
-#Ahat=mat.or.vec(clusters,clusters)
-#Phat[]=.7
-#Ahat[,]=.5
-#for(i in 1:length(Ahat[1,])){
-#        Ahat[i,i]=1
-#}
-#        testmodule=mat.or.vec(500,1)
-#        testmodule[]=1
-#        ADJ=mat.or.vec(500,500)
-#        ADJ[,]=0
-#        loglik=0
-#results=.Fortran("clustercompanies",textfile=as.character(tfile),ADJ=as.single(ADJ),Testmodule=as.integer(testmodule),Propensity=as.double(Phat),IntermodularAdjacency=as.double(Ahat),Loglik=as.double(loglik),Comps=as.integer(nodes),Members=as.integer(Members),Comps2=as.integer(nodes2),Clusters=as.integer(clusters))
-#resultsmod=results[2:8]
-#resultsmod$IntermodularAdjacency=matrix((results$IntermodularAdjacency),ncol=clusters)
-#resultsmod$ADJ=matrix((results$ADJ),ncol=500)
-#resultsmod$ADJ=resultsmod$ADJ[1:results$Comps2,1:results$Comps2]
-#res=scan(file="propClustTempOrderedComps.txt",what=list(character(),numeric(),integer()),skip=8+clusters,sep="|")
-#resultsmod$Genelist=res[1]
-#return(resultsmod)
-#}
-
-
-
 .speed1<-function(adjacency,nodes){
-        results=.Fortran("speedtest1",ADJ=as.double(adjacency),Nodes=as.integer(nodes))
+        results=.Fortran(.C_speedtest1,ADJ=as.double(adjacency),Nodes=as.integer(nodes))
         resultsmod=results$Nodes
         return(resultsmod)
 }
 
 .speed2<-function(adjacency,nodes){
-        results=.Fortran("speedtest2",ADJ=as.double(adjacency),Nodes=as.integer(nodes))
+        results=.Fortran(.C_speedtest2,ADJ=as.double(adjacency),Nodes=as.integer(nodes))
         resultsmod=results$Nodes
         return(resultsmod)
 }

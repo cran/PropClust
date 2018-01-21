@@ -5,10 +5,8 @@ will also be stored as a double. NA's are ignored.
 
 */
 
-#include <R.h>
-#include <R_ext/BLAS.h>
-#include <R_ext/libextern.h>
 
+#include "minWhichMin.h"
 
 void minWhichMin(double * matrix, int * nRows, int * nColumns, double * min, double * whichMin)
 {

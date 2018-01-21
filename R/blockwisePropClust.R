@@ -83,9 +83,9 @@
   nr = nrow(x);
   min = rep(0, nc);
   which = rep(0, nc);
-  whichmin = .C("minWhichMin", as.double(x),
+  whichmin = .C(.C_minWhichMin, as.double(x),
                 as.integer(nr), as.integer(nc),
-                as.double(min), as.double(which), DUP = FALSE, NAOK = TRUE);
+                as.double(min), as.double(which), NAOK = TRUE);
   cbind( min = whichmin[[4]], which = whichmin[[5]] + 1);
 }
 

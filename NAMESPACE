@@ -1,3 +1,4 @@
-useDynLib(PropClust)
-import(flashClust, dynamicTreeCut)
+useDynLib(PropClust, .registration = TRUE, .fixes = ".C_")
 exportPattern("^[^\\.]")
+import(flashClust, dynamicTreeCut)
+importFrom("stats", "as.dist")
