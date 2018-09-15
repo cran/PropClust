@@ -187,14 +187,3 @@ CPBADecomposition<-function(adjacency,
   return(resultsmod)
 }
 
-.speed1<-function(adjacency,nodes){
-        results=.Fortran(.C_speedtest1,ADJ=as.double(adjacency),Nodes=as.integer(nodes))
-        resultsmod=results$Nodes
-        return(resultsmod)
-}
-
-.speed2<-function(adjacency,nodes){
-        results=.Fortran(.C_speedtest2,ADJ=as.double(adjacency),Nodes=as.integer(nodes))
-        resultsmod=results$Nodes
-        return(resultsmod)
-}

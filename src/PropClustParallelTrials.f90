@@ -5863,60 +5863,6 @@
 
     END SUBROUTINE singleclusterupdate
 
-
-
-
-    SUBROUTINE speedtest1(ADJ,ROWS)
-
-!
-    IMPLICIT NONE
-    INTEGER :: I,J,ROWS
-    REAL(KIND=8), DIMENSION(ROWS,ROWS) :: ADJ
-    REAL(KIND=8), DIMENSION(ROWS) :: RSUM,PSUM
-
-    !CALL INTPR("RUNNING SPEED TEST",-1,1,0)
-    RSUM=0.
-    PSUM=0.
-
-    DO I=1,ROWS
-        RSUM(I)=SUM(ADJ(I,:))
-!        DO J=1,ROWS
-!            RSUM(I)=RSUM(I)+ADJ(I,J)
-!        END DO
-    END DO
-
-
-
-    END SUBROUTINE speedtest1
-
-
-
-    SUBROUTINE speedtest2(ADJ,ROWS) !THIS IS FASTER ALL CASES
-
-!
-    IMPLICIT NONE
-    INTEGER :: I,J,ROWS
-    REAL(KIND=8), DIMENSION(ROWS,ROWS) :: ADJ
-    REAL(KIND=8), DIMENSION(ROWS) :: RSUM,PSUM
-
-    !CALL INTPR("RUNNING SPEED TEST",-1,1,0)
-    RSUM=0.
-    PSUM=0.
-
-    DO I=1,ROWS
-        RSUM(I)=SUM(ADJ(:,I))
-!        DO J=1,ROWS
-!            RSUM(I)=RSUM(I)+ADJ(J,I)
-!        END DO
-    END DO
-    RSUM=MATMUL(ADJ**2,RSUM)
-
-
-
-    END SUBROUTINE speedtest2
-
-
-
 !
 !    PROGRAM MULTIGRAPH_CLUSTERING
 !

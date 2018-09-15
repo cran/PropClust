@@ -170,7 +170,7 @@ present if the initial clusters were not supplied by the user.}
 \references{
 Ranola et. al. (2010) A Poisson Model for Random Multigraphs. Bioinformatics 26(16):2004-2001.
 Ranola JM, Langfelder P, Lange K, Horvath S (2013) Cluster and propensity based approximation of a network.
-BMC Bioinformatics, in press.
+MC Syst Biol. 2013 Mar 14;7:21. doi: 10.1186/1752-0509-7-21.
 
 }
 

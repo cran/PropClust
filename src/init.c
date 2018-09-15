@@ -16,9 +16,7 @@ static R_NativePrimitiveArgType
   // propdecompaccel, propensitydecomposition
   propdecompaccel_t[] = {SINGLESXP, INTSXP, REALSXP, REALSXP, REALSXP, REALSXP, INTSXP, INTSXP, INTSXP},
   // singleclusterupdate
-  singleclusterupdate_t[] = {SINGLESXP, REALSXP, REALSXP, REALSXP, INTSXP, INTSXP},
-  // spped1 and speed2
-  speed_t[] = {REALSXP, INTSXP};
+  singleclusterupdate_t[] = {SINGLESXP, REALSXP, REALSXP, REALSXP, INTSXP, INTSXP};
   
   
   
@@ -34,8 +32,6 @@ static const R_FortranMethodDef R_FortranMethods[] = {
    {"propensitydecomposition", (DL_FUNC) &F77_NAME(propensitydecomposition), 9, propdecompaccel_t},
    {"propdecompaccel", (DL_FUNC) &F77_NAME(propdecompaccel), 9, propdecompaccel_t},
    {"singleclusterupdate", (DL_FUNC) & F77_NAME(singleclusterupdate), 6, singleclusterupdate_t},
-   {"speedtest1", (DL_FUNC) & F77_NAME(speedtest1), 2, speed_t},
-   {"speedtest2", (DL_FUNC) & F77_NAME(speedtest2), 2, speed_t},
    {NULL, NULL, 0, NULL}
 };
 

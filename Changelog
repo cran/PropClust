@@ -1,0 +1,6 @@
+2018/09/11: 1.4-5
+
+	. Removed internal function .speed1 and .speed2 and the corresponding
+	  Fortran code
+
+	. Added reference to DESCRIPTION
