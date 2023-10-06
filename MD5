@@ -1,5 +1,5 @@
-64d3308d0a5f2528cf024a25aee5c241 *Changelog
-9b314da8067752a19148b710dd0b491b *DESCRIPTION
+7a2246e12cbb0c239d49f05b04e750ae *Changelog
+505c2bf7569e5bd0bea5c31766e8b177 *DESCRIPTION
 b73898f8ed7d80789913dda614649241 *NAMESPACE
 5cc981f42a5248bb99a7a7d50ff2aaa2 *R/PropClust-internal.R
 89bede3b235b8926cbec891774660a80 *R/blockwisePropClust.R
@@ -7,7 +7,7 @@ b73898f8ed7d80789913dda614649241 *NAMESPACE
 4a8f30bb1fe693e9867c8872e66a4bd7 *man/propensityClustering.Rd
 93c43294d48b448e1e6737e5274dc00e *src/Makevars
 d41d8cd98f00b204e9800998ecf8427e *src/Makevars.win
-54d809de033d75468fa8ee7f320d194a *src/PropClustParallelTrials.f90
+edf86557acfce8954c8509b18e479355 *src/PropClustParallelTrials.f90
 cfb52c57826fb5fbde29df7f957679bb *src/PropClustParallelTrials.h
 e06fbc5b8dbcdc15b91c03be2f72de7f *src/init.c
 92ec7875beefbc219418f9e1d2edb2e4 *src/minWhichMin.c

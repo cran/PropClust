@@ -1,8 +1,8 @@
 Package: PropClust
 Type: Package
 Title: Propensity Clustering and Decomposition
-Version: 1.4-6
-Date: 2018-09-12
+Version: 1.4-7
+Date: 2023-09-06
 Author: John Michael O Ranola, Kenneth Lange, Steve Horvath, Peter Langfelder
 Maintainer: Peter Langfelder <Peter.Langfelder@gmail.com>
 Depends: R (>= 3.0.0), fastcluster, dynamicTreeCut
@@ -17,6 +17,6 @@ Description: Implementation of propensity clustering and
 License: GPL (>= 2)
 LazyLoad: yes
 NeedsCompilation: yes
-Packaged: 2018-09-12 15:49:22 UTC; plangfelder
+Packaged: 2023-10-06 12:09:44 UTC; plangfelder
 Repository: CRAN
-Date/Publication: 2018-09-15 07:10:10 UTC
+Date/Publication: 2023-10-06 12:40:05 UTC
